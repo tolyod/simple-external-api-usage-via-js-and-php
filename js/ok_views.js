@@ -127,7 +127,7 @@
 
 	var xobj = new XMLHttpRequest();
 	xobj.overrideMimeType("application/json");
-	var url = 'http://185.40.31.128:5580/getmovieprops.php?mvid='+id;
+	var url = window.location.origin + '/getmovieprops.php?mvid='+id;
 	xobj.open('GET', url, true); 
 	
 	xobj.onreadystatechange = function () {
