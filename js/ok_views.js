@@ -1,7 +1,7 @@
     var getMvsIds = function () {
       return document
              .getElementById("listofmovies")
-             .value.split(/\n/g)
+             .value.split(/\s|\n/g)
              .filter(e =>e.length >0)
              .map(url=>url.split(/\/video\/(\d*)/)[1]);
     };
