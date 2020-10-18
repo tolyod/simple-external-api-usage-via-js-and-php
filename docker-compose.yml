@@ -12,7 +12,8 @@ services:
         - .:/application
         - ./mysql_data/:/var/lib/mysql/
         - ./mysql_socks/:/var/run/mysqld/
-        - ./mysql_logs:/var/log/mysql
+        - ./mysql_logs:/var/log/mysql/
+        - ./mysql_seed:/docker-entrypoint-initdb.d/
       environment:
         - MYSQL_ROOT_PASSWORD
         - MYSQL_DATABASE
