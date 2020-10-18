@@ -1,0 +1,8 @@
+.env
+mysql_data/*
+mysql_data
+mysql_socks/
+mysql_socks/*
+*~
+node_modules/
+vendor/
