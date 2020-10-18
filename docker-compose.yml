@@ -1,0 +1,41 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+
+    mysql:
+      image: mysql:5.7
+      container_name: video-stats-mysql
+      working_dir: /application
+      volumes:
+        - .:/application
+        - ./mysql_data/:/var/lib/mysql/
+        - ./mysql_socks/:/var/run/mysqld/
+        - ./mysql_logs:/var/log/mysql
+      environment:
+        - MYSQL_ROOT_PASSWORD
+        - MYSQL_DATABASE
+        - MYSQL_USER
+        - MYSQL_PASSWORD
+      ports:
+        - "7802:3306"
+
+    webserver:
+      image: nginx:alpine
+      container_name: video-stats-webserver
+      working_dir: /application
+      volumes:
+          - .:/application
+          - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+       - "7800:80"
+
+    php-fpm:
+      build: phpdocker/php-fpm
+      container_name: video-stats-php-fpm
+      working_dir: /application
+      volumes:
+        - .:/application
+        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+
