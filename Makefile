@@ -7,5 +7,5 @@ status:
 logs:
         docker-compose -f docker-compose.yml logs --tail=10 -f
 setup:
-	mkdir mysql_data mysql_socks mysql_logs;chmod 777 mysql_data mysql_socks mysql_logs
+	mkdir mysql_data mysql_socks mysql_logs;chmod 777 mysql_data mysql_socks mysql_logs; mv env.example .env
 restart: stop start
