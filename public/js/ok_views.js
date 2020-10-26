@@ -7,7 +7,18 @@ var getMvsIds = function () {
 };
 
 var updateTableElement = function (id, dataObj) {
-  const { isDeleted, isPrivate, groupName, name, thumb, cntViews, cntLikes, cntComments, uploadDate } = dataObj;
+  const {
+    isDeleted,
+    isPrivate,
+    groupName,
+    name,
+    thumb,
+    cntViews,
+    cntLikes,
+    cntComments,
+    uploadDate,
+    cntShares,
+  } = dataObj;
   const trElem = document.getElementById('tr_'+id);
   var cntStyleColor = '#c3e6cb';
   // trElem.dataset.vars = JSON.stringify(dataObj);
@@ -36,6 +47,7 @@ var updateTableElement = function (id, dataObj) {
   document.getElementById('tdCountViews_'+id).style.backgroundColor = cntStyleColor;
   document.getElementById('tdCountLikes_'+id).innerHTML=cntLikes;
   document.getElementById('tdCountComments_'+id).innerHTML=cntComments;
+  document.getElementById('tdCountShares_'+id).innerHTML=cntShares;
   accoumCounter(dataObj);
 };
 
@@ -48,18 +60,20 @@ var countMovieTotals = function () {
     //console.log(dataObj);
     count--;
     try {
-      const { name, cntViews, cntLikes, cntComments } = dataObj;
+      const { name, cntViews, cntLikes, cntComments, cntShares } = dataObj;
       const nameIndex = totalObj.findIndex( el => el.name === name );
       const curIndex = nameIndex >=0 ? nameIndex : totalObj.length;
       if (typeof totalObj[curIndex] === "undefined") {
-        totalObj[curIndex]= {countViews:0, countComments:0, countLikes:0, name:""};
+        totalObj[curIndex]= {countViews:0, countComments:0, countLikes:0, countShares:0, name:""};
         totalObj[curIndex].countViews = cntViews;
         totalObj[curIndex].countComments = cntComments;
+        totalObj[curIndex].countShares = cntShares;
         totalObj[curIndex].countLikes = cntLikes;
         totalObj[curIndex].name = name;
       } else {
         totalObj[curIndex].countViews += cntViews;
         totalObj[curIndex].countComments += cntComments;
+        totalObj[curIndex].countShares += cntShares;
         totalObj[curIndex].countLikes += cntLikes;
       }
       if(count === 0) {
@@ -75,6 +89,7 @@ var drawTableTotal = function (arr) {
   var rootEl = document.getElementById('t_body_views_summ');
   var totalCountViews = arr.reduce( (acc, el) => acc+el.countViews ,0);
   var totalCountComments = arr.reduce( (acc, el) => acc+el.countComments ,0);
+  var totalCountShares = arr.reduce( (acc, el) => acc+el.countShares ,0);
   var totalCountLikes = arr.reduce( (acc, el) => acc+el.countLikes ,0);
   var trSum = document.createElement('tr');
   trSum.id = "tr_tot_sum";
@@ -87,6 +102,10 @@ var drawTableTotal = function (arr) {
   tdCountSumComments.id = "tdCount_tot_sum_comments";
   tdCountSumComments.innerHTML = "<b>"+totalCountComments+"</b>";
 
+  var tdCountSumShares =  document.createElement('td');
+  tdCountSumShares.id = "tdCount_tot_sum_comments";
+  tdCountSumShares.innerHTML = "<b>"+totalCountShares+"</b>";
+
   var tdCountSumLikes =  document.createElement('td');
   tdCountSumLikes.id = "tdCount_tot_sum_likes";
   tdCountSumLikes.innerHTML = "<b>"+totalCountLikes+"</b>";
@@ -98,6 +117,7 @@ var drawTableTotal = function (arr) {
 
   trSum.appendChild(tdNameSum);
   trSum.appendChild(tdCountSumComments);
+  trSum.appendChild(tdCountSumShares);
   trSum.appendChild(tdCountSumLikes);
   trSum.appendChild(tdCountSumViews);
 
@@ -114,6 +134,10 @@ var drawTableTotal = function (arr) {
     tdCountComments.id = "tdCountComments_tot_"+elIndex;
     tdCountComments.innerHTML = el.countComments;
 
+    var tdCountShares =  document.createElement('td');
+    tdCountShares.id = "tdCountComments_tot_"+elIndex;
+    tdCountShares.innerHTML = el.countShares;
+
     var tdCountLikes =  document.createElement('td');
     tdCountLikes.id = "tdCountLikes_tot_"+elIndex;
     tdCountLikes.innerHTML = el.countLikes;
@@ -124,6 +148,7 @@ var drawTableTotal = function (arr) {
 
     trEl.appendChild(tdName);
     trEl.appendChild(tdCountComments);
+    trEl.appendChild(tdCountShares);
     trEl.appendChild(tdCountLikes);
     trEl.appendChild(tdCountViews);
     rootEl.appendChild(trEl);
@@ -155,6 +180,7 @@ var normaliseOkDataObj = function (dataObj) {
 
   const cntViews  = noStats ? 0  : parseInt(dataObj.stats.views_total);
   const cntLikes  = noStats ? 0  : parseInt(dataObj.stats.likes);
+  const cntShares = (noStats || !dataObj.stats.shares) ? 0 : parseInt(dataObj.stats.shares);
   const cntComments  = (noStats || noComments) ? 0 : parseInt(dataObj.stats.comments);
   const thumb = (isDeleted || isPrivate) ? "" : `<img src=${dataObj.thumbnail} class="thumb"/>`;
   // console.log(dataObj.content_id);
@@ -166,6 +192,7 @@ var normaliseOkDataObj = function (dataObj) {
     "groupName": groupName,
     "cntViews":  cntViews,
     "cntLikes" : cntLikes,
+    "cntShares" : cntShares,
     "cntComments" : cntComments,
     "uploadDate": uploadDate
   };
@@ -217,6 +244,9 @@ var drawTable = function () {
     var tdCountViews =  document.createElement('td');
     tdCountViews.id = "tdCountViews_" + id;
 
+    var tdCountShares =  document.createElement('td');
+    tdCountShares.id = "tdCountShares_"+id;
+
     var tdCountComments =  document.createElement('td');
     tdCountComments.id = "tdCountComments_"+id;
 
@@ -230,6 +260,7 @@ var drawTable = function () {
     trEl.appendChild(tdUrl);
     trEl.appendChild(tdCountComments);
     trEl.appendChild(tdCountLikes);
+    trEl.appendChild(tdCountShares);
     trEl.appendChild(tdCountViews);
     rootEl.appendChild(trEl);
   })

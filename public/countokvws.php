@@ -78,6 +78,7 @@
                 <th data-sort-method='none' class="no-sort">Url</th>
                 <th style="min-width: 115px;">Comments</th>
                 <th style="min-width: 90px;">Likes</th>
+                <th style="min-width: 90px;">Shares</th>
                 <th style="min-width: 90px;">Views</th>
               </tr>
             </thead>
@@ -93,6 +94,7 @@
               <tr>
                 <th>name total</th>
                 <th>Comments</th>
+                <th>Shares</th>
                 <th>Likes</th>
                 <th>Views</th>
               </tr>
