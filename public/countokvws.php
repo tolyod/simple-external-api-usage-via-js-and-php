@@ -1,17 +1,22 @@
 <?php
+$urlScheme = 'http';
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+  $urlScheme = $_SERVER['HTTP_X_FORWARDED_PROTO'];
+}
+$urlPrefix = $urlScheme . "://" . $_SERVER['HTTP_HOST'] . "/";
 ?>
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/jquery-3.5.1.slim.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/tablesort.min.js"></script>
-    <script src='js/sorts/tablesort.number.min.js'></script>
-    <script src='js/sorts/tablesort.date.min.js'></script>
-    <link href='css/tablesort.css' rel='stylesheet'>
+    <script src="<?=$urlPrefix?>js/jquery-3.5.1.slim.min.js"></script>
+    <script src="<?=$urlPrefix?>js/bootstrap.min.js"></script>
+    <script src="<?=$urlPrefix?>js/tablesort.min.js"></script>
+    <script src='<?=$urlPrefix?>js/sorts/tablesort.number.min.js'></script>
+    <script src='<?=$urlPrefix?>js/sorts/tablesort.date.min.js'></script>
     <style type="text/css">
+    <?=file_get_contents('css/bootstrap.min.css');?>
+    <?=file_get_contents('css/tablesort.css');?>
     td.small { font-size: 60%; }
     img.thumb { width: 64px; height: 36px; }
     td.group_name { font-size:14px; word-break: break-word; }
@@ -106,6 +111,6 @@
         </div>
       </div>
     </div>
-    <script src="js/ok_views.js"></script>
+    <script src="<?=$urlPrefix?>js/ok_views.js"></script>
   </body>
 </html>
