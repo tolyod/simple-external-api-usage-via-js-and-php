@@ -198,7 +198,7 @@ var normaliseOkDataObj = function (dataObj) {
   };
 };
 
-var loadJsonData = function (callback,id) {
+var loadJsonData = function (callback, id) {
   var xobj = new XMLHttpRequest();
   xobj.overrideMimeType("application/json");
   var url = window.location.origin + '/getmovieprops.php?mvid='+id;
@@ -213,6 +213,63 @@ var loadJsonData = function (callback,id) {
   };
   xobj.send(null);
 };
+
+const okFetch = (cb, id) => {
+  const movieUrl = 'https://ok.ru/video/' + id;
+  const groupNameSelector = 'div.ucard_info > div.ucard_add-info_i.ellip > span > a';
+  const viewsSelector = "span.vp-layer-info_i.vp-layer-info_views";
+  const commentsSelector = 'a[data-module="CommentWidgets"] span.widget_count.js-count';
+  const sharesSelector = 'button[data-type="RESHARE"] span.widget_count.js-count';
+  const likesSelector = 'span.js-klass span.js-count';
+  const defaultObj = {
+    "isDeleted": true,
+    "isPrivate": false,
+    "name": '[Deletaed]',
+    "thumb" : '' ,
+    "groupName": '[Deleted]',
+    "cntViews":  0,
+    "cntLikes" : 0,
+    "cntShares" : 0,
+    "cntComments" : 0,
+    "uploadDate": '',
+  };
+
+  fetch(movieUrl)
+  .then(r => r.text())
+  .then(html => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const isDeleted = !doc.querySelector(commentsSelector);
+    if (isDeleted) {
+      //debugger;
+      return cb(id, defaultObj);
+    }
+    const cntComments = parseInt(doc.querySelector(commentsSelector).textContent);
+    const cntShares = parseInt(doc.querySelector(sharesSelector).textContent);
+    const cntLikes = parseInt(doc.querySelector(likesSelector).textContent);
+    const movieMetadata = JSON.parse(JSON.parse(doc.querySelector('[data-module="OKVideo"]').dataset.options).flashvars.metadata);
+    const name = movieMetadata.movie.title;
+    const thumbUrl = movieMetadata.movie.poster;
+    const thumb = `<img src="${thumbUrl}" class="thumb" />`;
+    const cntViews = parseInt(doc.querySelector(viewsSelector).textContent.replace(/[\D]/g, ''));
+    const groupName = doc.querySelector(groupNameSelector).textContent;
+    const groupNameHref = doc.querySelector(groupNameSelector).href;
+    const groupNameElement = `<a href="${groupNameHref}">${groupName}</a>`;
+    const data = {
+      "isDeleted": false,
+      "isPrivate": false,
+      name,
+      thumb,
+      "groupName" : groupNameElement,
+      cntViews,
+      cntLikes,
+      cntShares,
+      cntComments,
+      "uploadDate": 'yyyy-mm-dd',
+    };
+    return cb(id, data);
+  });
+}
 
 var drawTable = function () {
   var ids = getMvsIds();
@@ -270,8 +327,10 @@ var accoumCounter = function(){};
 
 var processTable = function() {
   accoumCounter = countMovieTotals();
+  const isOkSite = location.href.includes('ok.ru');
+  const curDataFetch = (cb, id) => isOkSite ? okFetch(cb, id) : loadJsonData(cb, id);
   getMvsIds().map( id => {
-    loadJsonData(updateTableElement, id)
+    curDataFetch(updateTableElement, id)
   });
   new Tablesort(document.getElementById('movies-table-id'), {
     descending: true
