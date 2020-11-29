@@ -123,14 +123,19 @@ function getRecentlyUnupdatedClips($pdo)
  * */
 function getStatsFromFullSiteVersion($cookies, $videoUrl)
 {
-    $opts = array(
+    /* $opts = array(
         'http' => array(
             'method' => "GET",
             'header' => "Accept-language: en\r\n" .
             $cookies . "\r\n"
         )
+    ); */
+    $opts = array(
+        'http' => array(
+            'method' => "GET",
+            'header' => "Accept-language: en\r\n"
+        )
     );
-
     $context = stream_context_create($opts);
     $html = file_get_contents($videoUrl, false, $context);
 
