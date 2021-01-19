@@ -214,7 +214,7 @@ var loadJsonData = function (callback, id) {
   xobj.send(null);
 };
 
-const okFetch = (cb, id) => {
+const okFetch = (cb, id, retriesCount = 0) => {
   const movieUrl = 'https://ok.ru/video/' + id;
   const groupNameSelector = 'div.ucard_info > div.ucard_add-info_i.ellip > span > a';
   const viewsSelector = "span.vp-layer-info_i.vp-layer-info_views";
@@ -233,42 +233,46 @@ const okFetch = (cb, id) => {
     "cntComments" : 0,
     "uploadDate": '',
   };
-
-  fetch(movieUrl)
-  .then(r => r.text())
-  .then(html => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, "text/html");
-    const isDeleted = !doc.querySelector(commentsSelector);
-    if (isDeleted) {
-      //debugger;
-      return cb(id, defaultObj);
-    }
-    const cntComments = parseInt(doc.querySelector(commentsSelector).textContent);
-    const cntShares = parseInt(doc.querySelector(sharesSelector).textContent);
-    const cntLikes = parseInt(doc.querySelector(likesSelector).textContent);
-    const movieMetadata = JSON.parse(JSON.parse(doc.querySelector('[data-module="OKVideo"]').dataset.options).flashvars.metadata);
-    const name = movieMetadata.movie.title;
-    const thumbUrl = movieMetadata.movie.poster;
-    const thumb = `<img src="${thumbUrl}" class="thumb" />`;
-    const cntViews = parseInt(doc.querySelector(viewsSelector).textContent.replace(/[\D]/g, ''));
-    const groupName = doc.querySelector(groupNameSelector).textContent;
-    const groupNameHref = doc.querySelector(groupNameSelector).href;
-    const groupNameElement = `<a href="${groupNameHref}">${groupName}</a>`;
-    const data = {
-      "isDeleted": false,
-      "isPrivate": false,
-      name,
-      thumb,
-      "groupName" : groupNameElement,
-      cntViews,
-      cntLikes,
-      cntShares,
-      cntComments,
-      "uploadDate": 'yyyy-mm-dd',
-    };
-    return cb(id, data);
-  });
+  setTimeout( () => {
+    fetch(movieUrl)
+    .then(r => r.text())
+    .then(html => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const isDeleted = !doc.querySelector(commentsSelector);
+      if (html.length < 10 && retriesCount <3) {
+        okFetch(cb, id, retriesCount + 1);
+      }
+      if (isDeleted) {
+        debugger;
+        return cb(id, defaultObj);
+      }
+      const cntComments = parseInt(doc.querySelector(commentsSelector).textContent);
+      const cntShares = parseInt(doc.querySelector(sharesSelector).textContent);
+      const cntLikes = parseInt(doc.querySelector(likesSelector).textContent);
+      const movieMetadata = JSON.parse(JSON.parse(doc.querySelector('[data-module="OKVideo"]').dataset.options).flashvars.metadata);
+      const name = movieMetadata.movie.title;
+      const thumbUrl = movieMetadata.movie.poster;
+      const thumb = `<img src="${thumbUrl}" class="thumb" />`;
+      const cntViews = parseInt(doc.querySelector(viewsSelector).textContent.replace(/[\D]/g, ''));
+      const groupName = doc.querySelector(groupNameSelector).textContent;
+      const groupNameHref = doc.querySelector(groupNameSelector).href;
+      const groupNameElement = `<a href="${groupNameHref}">${groupName}</a>`;
+      const data = {
+        "isDeleted": false,
+        "isPrivate": false,
+        name,
+        thumb,
+        "groupName" : groupNameElement,
+        cntViews,
+        cntLikes,
+        cntShares,
+        cntComments,
+        "uploadDate": 'yyyy-mm-dd',
+      };
+      return cb(id, data);
+    });
+  }, 2000);
 }
 
 var drawTable = function () {
