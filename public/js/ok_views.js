@@ -240,11 +240,11 @@ const okFetch = (cb, id, retriesCount = 0) => {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, "text/html");
       const isDeleted = !doc.querySelector(commentsSelector);
-      if (html.length < 10 && retriesCount <3) {
+      if (html.length < 10 && retriesCount <= 3) {
         okFetch(cb, id, retriesCount + 1);
+        return;
       }
       if (isDeleted) {
-        debugger;
         return cb(id, defaultObj);
       }
       const cntComments = parseInt(doc.querySelector(commentsSelector).textContent);
@@ -252,6 +252,7 @@ const okFetch = (cb, id, retriesCount = 0) => {
       const cntLikes = parseInt(doc.querySelector(likesSelector).textContent);
       const movieMetadata = JSON.parse(JSON.parse(doc.querySelector('[data-module="OKVideo"]').dataset.options).flashvars.metadata);
       const name = movieMetadata.movie.title;
+      // console.log(movieMetadata);
       const thumbUrl = movieMetadata.movie.poster;
       const thumb = `<img src="${thumbUrl}" class="thumb" />`;
       const cntViews = parseInt(doc.querySelector(viewsSelector).textContent.replace(/[\D]/g, ''));
