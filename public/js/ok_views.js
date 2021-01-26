@@ -221,10 +221,12 @@ const okFetch = (cb, id, retriesCount = 0) => {
   const commentsSelector = 'a[data-module="CommentWidgets"] span.widget_count.js-count';
   const sharesSelector = 'button[data-type="RESHARE"] span.widget_count.js-count';
   const likesSelector = 'span.js-klass span.js-count';
+  const uploadDateSelector = 'span.vp-layer-info_i.vp-layer-info_date';
+  const deletedVideoMsgSelector = '#vp_cnt > div.vp-layer_stub > div > div > div';
   const defaultObj = {
     "isDeleted": true,
     "isPrivate": false,
-    "name": '[Deletaed]',
+    "name": '[Deleted]',
     "thumb" : '' ,
     "groupName": '[Deleted]',
     "cntViews":  0,
@@ -245,6 +247,11 @@ const okFetch = (cb, id, retriesCount = 0) => {
         return;
       }
       if (isDeleted) {
+        const deletedVideoMsg = doc.querySelector(deletedVideoMsgSelector).textContent;
+        const isPrivate = /групп|group/i.test(deletedVideoMsg);
+        defaultObj.name = deletedVideoMsg;
+        defaultObj.isPrivate = isPrivate;
+        defaultObj.groupName = isPrivate ? '[Private]' : '[Deleted]'
         return cb(id, defaultObj);
       }
       const cntComments = parseInt(doc.querySelector(commentsSelector).textContent);
@@ -258,6 +265,7 @@ const okFetch = (cb, id, retriesCount = 0) => {
       const cntViews = parseInt(doc.querySelector(viewsSelector).textContent.replace(/[\D]/g, ''));
       const groupName = doc.querySelector(groupNameSelector).textContent;
       const groupNameHref = doc.querySelector(groupNameSelector).href;
+      const uploadDate = doc.querySelector(uploadDateSelector).textContent;
       const groupNameElement = `<a href="${groupNameHref}">${groupName}</a>`;
       const data = {
         "isDeleted": false,
@@ -269,7 +277,7 @@ const okFetch = (cb, id, retriesCount = 0) => {
         cntLikes,
         cntShares,
         cntComments,
-        "uploadDate": 'yyyy-mm-dd',
+        uploadDate,
       };
       return cb(id, data);
     });
