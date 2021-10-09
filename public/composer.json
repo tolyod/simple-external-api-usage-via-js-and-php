@@ -1,6 +1,7 @@
 {
     "require": {
         "envms/fluentpdo": "^2.2",
-        "vlucas/phpdotenv": "^5.2"
+        "vlucas/phpdotenv": "^5.2",
+        "rosell-dk/webp-convert-cloud-service": "^2.0"
     }
 }

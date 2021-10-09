@@ -218,7 +218,7 @@ const okFetch = (cb, id, retriesCount = 0) => {
   const movieUrl = 'https://ok.ru/video/' + id;
   const groupNameSelector = 'div.ucard_info > div.ucard_add-info_i.ellip > span > a';
   const viewsSelector = "span.vp-layer-info_i.vp-layer-info_views";
-  const commentsSelector = 'a[data-module="CommentWidgets"] span.widget_count.js-count';
+  const commentsSelector = 'a[data-module*="CommentWidgets"] span.widget_count.js-count';
   const sharesSelector = 'button[data-type="RESHARE"] span.widget_count.js-count';
   const likesSelector = 'span.js-klass span.js-count';
   const uploadDateSelector = 'span.vp-layer-info_i.vp-layer-info_date';
@@ -377,4 +377,5 @@ function selectElementContents(el) {
 document.getElementById('btn-process').addEventListener('click', processTable);
 document.getElementById('listofmovies').addEventListener('change', drawTable);
 document.getElementById('btn-copy').addEventListener('click', () => selectElementContents(document.getElementById('movies-table-id')));
+document.getElementById('btn-copy-sum').addEventListener('click', () => selectElementContents(document.getElementById('movies-summary')));
 document.getElementById('btn-reload').addEventListener('click', () => location.reload());

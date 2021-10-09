@@ -4,6 +4,10 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
   $urlScheme = $_SERVER['HTTP_X_FORWARDED_PROTO'];
 }
 $urlPrefix = $urlScheme . "://" . $_SERVER['HTTP_HOST'] . "/";
+if($_SERVER['HTTP_HOST'] !== 'ok-videostats.hopto.org') {
+  header('Location: https://ok-videostats.hopto.org', 301);
+  exit;
+}
 ?>
 <html>
   <head>
@@ -29,13 +33,24 @@ $urlPrefix = $urlScheme . "://" . $_SERVER['HTTP_HOST'] . "/";
         border-radius: 4px;
      }
     .copy-btn {
-         position: absolute;
-         right: 10px;
-         top: -30px;
-         width: 38px;
-        font-size: 10px;
+      position: absolute;
+      background-color: inherit;
+      border: inherit;
+      right: 10px;
+      font-size: 24px;
     }
     .copy-btn:focus {
+      background-color:grey;
+      /* filter:invert(100%); */
+    }
+    .copy-btn-sum {
+      position: absolute;
+      right: 10px;
+      font-size: 24px;
+      background-color: inherit;
+      border: inherit;
+    }
+    .copy-btn-sum:focus {
       background-color:grey;
     }
     </style>
@@ -71,7 +86,8 @@ $urlPrefix = $urlScheme . "://" . $_SERVER['HTTP_HOST'] . "/";
         <div class="col-xs-6 col-md-6">
         <div class="table-responsive">
         <div>
-        <button class="copy-btn" id="btn-copy">Copy</button>
+        <!--button class="copy-btn" id="btn-copy">📋</button-->
+        <button class="copy-btn" id="btn-copy"><svg class="" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z"></path></svg></button>
         </div>
           <table id="movies-table-id" class="table">
             <thead>
@@ -94,7 +110,16 @@ $urlPrefix = $urlScheme . "://" . $_SERVER['HTTP_HOST'] . "/";
         </div>
         <div class="col-xs-6 col-md-4">
         <div class="table-responsive">
-          <table class="table table-hover">
+          <div>
+            <!--button class="copy-btn-sum" id="btn-copy-sum">📋</button-->
+            <button class="copy-btn-sum" id="btn-copy-sum">
+              <svg class="" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.75 1a.75.75 0 00-.75.75v3c0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75v-3a.75.75 0 00-.75-.75h-4.5zm.75 3V2.5h3V4h-3zm-2.874-.467a.75.75 0 00-.752-1.298A1.75 1.75 0 002 3.75v9.5c0 .966.784 1.75 1.75 1.75h8.5A1.75 1.75 0 0014 13.25v-9.5a1.75 1.75 0 00-.874-1.515.75.75 0 10-.752 1.298.25.25 0 01.126.217v9.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25v-9.5a.25.25 0 01.126-.217z">
+                </path>
+              </svg>
+            </button>
+          </div>
+         <table class="table table-hover" id="movies-summary">
             <thead>
               <tr>
                 <th>name total</th>
