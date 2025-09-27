@@ -57,7 +57,7 @@ var countMovieTotals = function () {
   // const total = getMvsIds().length;
 
   return function (dataObj) {
-    //console.log(dataObj);
+    // console.log(dataObj);
     count--;
     try {
       const { name, cntViews, cntLikes, cntComments, cntShares } = dataObj;
@@ -68,7 +68,7 @@ var countMovieTotals = function () {
         totalObj[curIndex].countViews = cntViews;
         totalObj[curIndex].countComments = cntComments;
         totalObj[curIndex].countShares = cntShares;
-        totalObj[curIndex].countLikes = cntLikes;
+        totalObj[curIndex].countLikes = !!cntLikes ? cntLikes : 0;
         totalObj[curIndex].name = name;
       } else {
         totalObj[curIndex].countViews += cntViews;
@@ -76,8 +76,9 @@ var countMovieTotals = function () {
         totalObj[curIndex].countShares += cntShares;
         totalObj[curIndex].countLikes += cntLikes;
       }
-      if(count === 0) {
+      if (count === 0) {
         drawTableTotal(totalObj);
+        // console.log(totalObj);
       }
     } catch (e) {
       // console.log(e);
@@ -122,6 +123,7 @@ var drawTableTotal = function (arr) {
   trSum.appendChild(tdCountSumViews);
 
   rootEl.appendChild(trSum);
+
   arr.map( (el, elIndex) => {
     var trEl = document.createElement('tr');
     trEl.id = "tr_tot_"+elIndex;
@@ -179,7 +181,7 @@ var normaliseOkDataObj = function (dataObj) {
     : `<a href="https://ok.ru/search?st.mode=Groups&st.grmode=Groups&st.posted=set&st.query=${dataObj.login}">${dataObj.login}</a>`;
 
   const cntViews  = noStats ? 0  : parseInt(dataObj.stats.views_total);
-  const cntLikes  = noStats ? 0  : parseInt(dataObj.stats.likes);
+  const cntLikes  = noStats ? 0  : (!!dataObj.stats.likes ? parseInt(dataObj.stats.likes) : 0) ;
   const cntShares = (noStats || !dataObj.stats.shares) ? 0 : parseInt(dataObj.stats.shares);
   const cntComments  = (noStats || noComments) ? 0 : parseInt(dataObj.stats.comments);
   const thumb = (isDeleted || isPrivate) ? "" : `<img src=${dataObj.thumbnail} class="thumb"/>`;
@@ -342,9 +344,11 @@ var processTable = function() {
   accoumCounter = countMovieTotals();
   const isOkSite = location.href.includes('ok.ru');
   const curDataFetch = (cb, id) => isOkSite ? okFetch(cb, id) : loadJsonData(cb, id);
+
   getMvsIds().map( id => {
     curDataFetch(updateTableElement, id)
   });
+
   new Tablesort(document.getElementById('movies-table-id'), {
     descending: true
   });

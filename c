@@ -1,0 +1,16 @@
+curl 'https://ok.ru/' \
+  -H 'authority: ok.ru' \
+  -H 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7' \
+  -H 'accept-language: ru,en-US;q=0.9,en;q=0.8' \
+  -H 'cache-control: max-age=0' \
+  -H 'cookie: _statid=175408b9-ead7-4b6c-b5cb-d69cb1b80a39; bci=-914970027749722424; tmr_lvid=71201b7649c3e0a4de135cc0a1b224ba; tmr_lvidTS=1706727186516; viewport=1173; _ym_uid=1706727187123913856; _ym_d=1706727187; CDN=; TZ=6; _flashVersion=0; klos=0; _userIds=; _suserIds=; _ga=GA1.1.2073411728.1706947239; LASTSRV=ok.ru; _ga_GEGXS3ELM6=GS1.1.1706947239.2.1.1706947815.0.0.0; JSESSIONID=84e1e4d6325c8ac25b525b0f02954b79bab6b7f1519b4571.239f0915; AUTHCODE=BMQWiEKoi96vHBXdTxuQ0k6UDY072_rWTO1YyPHQ-D_MHETtxRPNUutKhzIejUHEOP70wuCZa0h3Z4jdDuNXdVPGvFbwF3nhRaxXC7FcZqh_V2aBWlU81DHz_ygpw5jA7UgfwX4-WoVSpae8wQ_5; vdt=oySkC4NdLW7lIUWrqHyo7XL93yAV1MkXjdmBRcr/oo8AAABjaXa1gYOW3HdUWkokdiPBjNcR2bPizy/C05nN9BDwl4EIbhkV+5dYcfWIsHGFNc3OaJlH297K44hQ5HKFDi17rPpj/ibQ/Yw6Nwm8SwWBjuWSlKkuIf3ospBVWI4MSQyDg8/Sx2k=; msg_conf=2468555756792551; theme_mode=LIGHT; id=zVh2080EleoWDLjHNmELl%3A1707939021368; tmr_detect=0%7C1707939022430; __last_online=1707939087636; TZD=6.357; TD=357' \
+  -H 'sec-ch-ua: "Chromium";v="121", "Not A(Brand";v="99"' \
+  -H 'sec-ch-ua-mobile: ?0' \
+  -H 'sec-ch-ua-platform: "Linux"' \
+  -H 'sec-fetch-dest: document' \
+  -H 'sec-fetch-mode: navigate' \
+  -H 'sec-fetch-site: same-origin' \
+  -H 'sec-fetch-user: ?1' \
+  -H 'upgrade-insecure-requests: 1' \
+  -H 'user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36' \
+  --compressed

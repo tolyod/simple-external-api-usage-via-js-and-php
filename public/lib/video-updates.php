@@ -144,7 +144,7 @@ function getStatsFromFullSiteVersion($cookies, $videoUrl)
     $xpathQueryViews = '//span[contains(@class, "vp-layer-info_views")]';
     $xpathQueryComments = '//a[@data-module="CommentWidgets"]/span[@class="widget_count js-count"]';
     $xpathQueryShares = '//button[@data-type="RESHARE"]/span[@class="widget_count js-count"]';
-    $xpathQueryLikes = '//span[contains(@class,"js-klass")]/span[contains(@class, "js-count")]';
+    $xpathQueryLikes = '//a[contains(@class, "feed_info_sm __reactions")][@data-cnt]';
     $xpathQueryOkVideoModule = '//div[@data-module="OKVideo"]/@data-options';
     $xpath = new DOMXpath($dom);
     $nodesViews = count($xpath->query($xpathQueryViews))
@@ -157,8 +157,8 @@ function getStatsFromFullSiteVersion($cookies, $videoUrl)
         $xpath->query($xpathQueryShares)[0]->textContent
         : false;
     $nodesLikes = count($xpath->query($xpathQueryLikes)) ?
-        $xpath->query($xpathQueryLikes)[0]->textContent
-        : false;
+        intval(preg_replace('/[^0-9]+/', '', $xpath->query($xpathQueryLikes)[0]->textContent), 10)
+        : 0;
     $okVideoOpts = count($xpath->query($xpathQueryOkVideoModule)) ?
         json_decode($xpath->query($xpathQueryOkVideoModule)[0]->value, true)
         : false;

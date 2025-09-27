@@ -46,7 +46,7 @@ services:
       labels:
           - "traefik.docker.network=web"
           - "traefik.enable=true"
-          - "traefik.frontend.rule=Host:ok-videostats.hopto.org,russian-shakespeare.club,apoloz.is-a.dev"
+          - "traefik.frontend.rule=Host:ok-videostats.hopto.org,russian-shakespeare.club,apoloz.is-a.dev,passbolt01.webhop.me,vcdn1-rf.servep2p.com,vcdn1-rf.ru,vairgin.vcdn1-rf.ru,vairgin-2.vcdn1-rf.ru"
           - "traefik.port=80"
           - "traefik.protocol=http"
 

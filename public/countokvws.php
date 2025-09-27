@@ -53,6 +53,10 @@ if($_SERVER['HTTP_HOST'] !== 'ok-videostats.hopto.org') {
     .copy-btn-sum:focus {
       background-color:grey;
     }
+    #listofmovies {
+      font-size: 14px;
+    }
+    #movies-table-id > thead, #movies-summary > thead { font-size: 12px }
     </style>
   </head>
   <body>
@@ -136,6 +140,6 @@ if($_SERVER['HTTP_HOST'] !== 'ok-videostats.hopto.org') {
         </div>
       </div>
     </div>
-    <script src="<?=$urlPrefix?>js/ok_views.js"></script>
+<script src="<?= $urlPrefix ?>js/ok_views.js?t=<?= time()?>"></script>
   </body>
 </html>

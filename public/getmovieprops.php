@@ -33,6 +33,7 @@ $domEl = new SimpleXMLElement($xml);
 $ovs = json_decode(
     json_encode($domEl->children('ovs', true))
 );
+
 $stats = json_decode(
     json_encode(@$domEl->xpath("//*[local-name()='stats']")[0]),
     true
@@ -52,6 +53,7 @@ if ($fullSiteStats['authorName'] != false) {
 } else {
     $ovs->stats = $stats;
 }
+
 /* $ovs->fullSiteStats = $fullSiteStats; */
 $json_stats = json_encode($ovs);
 updateVideoStats($json_stats, $fluent);
